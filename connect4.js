@@ -20,7 +20,7 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 // sets "board" to empty HEIGHT x WIDTH matrix array
 function makeBoard() {
   for (let y = 0; y < HEIGHT; y++) {
-    board.push(new Array(WIDTH));
+    board.push(new Array(WIDTH).fill(null));
   }
 }
 
@@ -66,16 +66,25 @@ function makeHtmlBoard() {
 }
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
-
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for(let y= HEIGHT-1; y>=0; y-- ){
+    if( board[y][x]===null ){
+      return y
+    }
+  }
+  return null
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
-function placeInTable(y, x) {
+function placeInTable( y, x) {
   // TODO: make a div and insert into correct table cell
+  let targetCell = document.getElementById(`${y}-${x}`)
+  let newPiece = document.createElement('div')
+  newPiece.classList.add('piece' , `p${currPlayer}`)
+  targetCell.append(newPiece)
+
 }
 
 /** endGame: announce game end */
@@ -100,17 +109,27 @@ function handleClick(evt) {
   // TODO: add line to update in-memory board
   placeInTable(y, x);
 
+  board[y][x] = currPlayer;
+
+ 
+
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
-
+  
   // check for tie
+  //revisit checking with every vs compaing length to constant
   // TODO: check if all cells in board are filled; if so call, call endGame
+  if( board.every( el => (el ===1 || el === 2) ) ) endGame("The game ended in a tie")
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  currPlayer ===1 ? currPlayer =2: currPlayer =1;
 }
+
+
+
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
