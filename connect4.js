@@ -52,14 +52,14 @@ function makeHtmlBoard() {
     for (let x = 0; x < WIDTH; x++) {
       // TODO: Create a table cell element and assign to a "cell" variable
       let cell = document.createElement("td");
-      
+
       // TODO: add an id, y-x, to the above table cell element
       // you'll use this later, so make sure you use y-x
       cell.setAttribute("id", `${y}-${x}`);
 
       // TODO: append the table cell to the table row
       row.append(cell);
-    } 
+    }
     // TODO: append the row to the html board
     htmlBoard.append(row);
   }
@@ -68,8 +68,8 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  for(let y= HEIGHT-1; y>=0; y-- ){
-    if( board[y][x]===null ){
+  for (let y = HEIGHT - 1; y >= 0; y--) {
+    if (board[y][x] === null) {
       return y
     }
   }
@@ -78,11 +78,11 @@ function findSpotForCol(x) {
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
-function placeInTable( y, x) {
+function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   let targetCell = document.getElementById(`${y}-${x}`)
   let newPiece = document.createElement('div')
-  newPiece.classList.add('piece' , `p${currPlayer}`)
+  newPiece.classList.add('piece', `p${currPlayer}`)
   targetCell.append(newPiece)
 
 }
@@ -91,6 +91,7 @@ function placeInTable( y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -111,21 +112,24 @@ function handleClick(evt) {
 
   board[y][x] = currPlayer;
 
- 
-
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
-  
   // check for tie
   //revisit checking with every vs compaing length to constant
   // TODO: check if all cells in board are filled; if so call, call endGame
-  if( board.every( el => (el ===1 || el === 2) ) ) endGame("The game ended in a tie")
+let boardComplete = board.flat(1);
+if (boardComplete.every(el => (el === 1 || el === 2))) endGame("The game ended in a tie");
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
-  currPlayer ===1 ? currPlayer =2: currPlayer =1;
+  // currPlayer === 1 ? currPlayer = 2 : currPlayer = 1;
+  if (currPlayer === 1) {
+    currPlayer = 2;
+  } else {
+    currPlayer = 1;
+  }
 }
 
 
@@ -142,9 +146,41 @@ function checkForWin() {
    */
   function _win(cells) {
 
-    // TODO: Check four cells to see if they're all legal & all color of current
-    // player
+    // TODO: Check four cells to see if they're all legal &
+    // for (let arr of cells) {
+    //   for (let i = 0; i < 2; i++) {
+    //     if (arr[0] < 0 || arr[0] > HEIGHT) {
+    //       return false;
+    //     }
+    //     if (arr[1] < 0 || arr[1] > WIDTH) {
+    //       return false;
+    //     }
+    //   }
+    // }
+    for (let [y,x] of cells) {
+        if (y < 0 || y >= HEIGHT) {
+          return false;
+        }
+        if (x < 0 || x >= WIDTH) {
+          return false;
+        }
+    }
 
+    // TODO: Check four cells to see if they're all color of current player
+    // let player = board[cells[0][0]][cells[0][1]]
+    for (let i = 0; i < cells.length; i++) {
+      // debugger;
+      // console.log(board[cells[i][0]][cells[i][1]]);
+      let y = cells[i][0];
+      let x = cells[i][1];
+      console.log("y", y);
+      console.log("x", x);
+      if (board[y][x] !== currPlayer) {
+        return false;
+      }
+    }
+    // return true if functiuon reaches this point and verifies everything
+    return true;
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
@@ -158,9 +194,9 @@ function checkForWin() {
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDL = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      let diagDR = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
