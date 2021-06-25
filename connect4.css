@@ -14,6 +14,7 @@
   width: 80%;
   height: 80%;
   border-radius:70%;
+  /* position: absolute; */
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
@@ -26,6 +27,21 @@
 }
 
 /* column-top is table row of clickable areas for each column */
+
+/* #column-top {
+  animation-duration: 3s;
+  animation-name: dropdown;
+}
+
+@keyframes dropdown {
+  from {
+    margin-top: 10%;
+  }
+
+  to {
+    margin-top: 80%;
+  }
+} */
 
 #column-top td {
   border: dashed 1px lightgray;

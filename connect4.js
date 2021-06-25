@@ -91,7 +91,9 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
-  alert(msg);
+  setTimeout(() => alert(msg), 300);
+  let top = document.getElementById("column-top");
+  top.removeEventListener("click", handleClick);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -122,14 +124,11 @@ function handleClick(evt) {
 let boardComplete = board.flat(1);
 if (boardComplete.every(el => (el === 1 || el === 2))) endGame("The game ended in a tie");
 
+// if (board[0].every())
   // switch players
   // TODO: switch currPlayer 1 <-> 2
   // currPlayer === 1 ? currPlayer = 2 : currPlayer = 1;
-  if (currPlayer === 1) {
-    currPlayer = 2;
-  } else {
-    currPlayer = 1;
-  }
+  currPlayer = (currPlayer === 1) ? 2 : 1;
 }
 
 
@@ -146,17 +145,7 @@ function checkForWin() {
    */
   function _win(cells) {
 
-    // TODO: Check four cells to see if they're all legal &
-    // for (let arr of cells) {
-    //   for (let i = 0; i < 2; i++) {
-    //     if (arr[0] < 0 || arr[0] > HEIGHT) {
-    //       return false;
-    //     }
-    //     if (arr[1] < 0 || arr[1] > WIDTH) {
-    //       return false;
-    //     }
-    //   }
-    // }
+    // TODO: Check four cells to see if they're all legal 
     for (let [y,x] of cells) {
         if (y < 0 || y >= HEIGHT) {
           return false;
@@ -169,8 +158,6 @@ function checkForWin() {
     // TODO: Check four cells to see if they're all color of current player
     // let player = board[cells[0][0]][cells[0][1]]
     for (let i = 0; i < cells.length; i++) {
-      // debugger;
-      // console.log(board[cells[i][0]][cells[i][1]]);
       let y = cells[i][0];
       let x = cells[i][1];
       console.log("y", y);
@@ -179,7 +166,7 @@ function checkForWin() {
         return false;
       }
     }
-    // return true if functiuon reaches this point and verifies everything
+    // return true if function reaches this point and verifies everything
     return true;
   }
 
